@@ -1,0 +1,31 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0.35
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - network1
+
+  cannal:
+    image: canal/canal-server:v1.1.7
+    ports:
+      - "11111:11111"
+    volumes:
+      - ./instance.properties:/home/admin/canal-server/conf/example/instance.properties
+    networks:
+      - network1
+
+networks:
+  network1:
+    name: ${NETWORK}
+    external: true
+
+volumes:
+  mysql_data:
+    driver: local
